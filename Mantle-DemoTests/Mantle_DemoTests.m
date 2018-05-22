@@ -7,8 +7,12 @@
 //
 
 #import <XCTest/XCTest.h>
+#import "GHIssue.h"
+#import <Mantle/Mantle.h>
 
 @interface Mantle_DemoTests : XCTestCase
+
+@property (nonatomic) NSDictionary *gh_issueDict;
 
 @end
 
@@ -16,7 +20,10 @@
 
 - (void)setUp {
     [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
+
+    NSString *path = [[NSBundle bundleForClass:self.class] pathForResource:@"gh_issue" ofType:@"json"];
+    _gh_issueDict = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfFile:path] options:0 error:nil];
+    
 }
 
 - (void)tearDown {
@@ -24,9 +31,10 @@
     [super tearDown];
 }
 
-- (void)testExample {
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
+- (void)testModelFromDictionary {
+    NSError *e;
+    GHIssue *issue = [MTLJSONAdapter modelOfClass:[GHIssue class] fromJSONDictionary:_gh_issueDict error:&e];
+    
 }
 
 - (void)testPerformanceExample {
